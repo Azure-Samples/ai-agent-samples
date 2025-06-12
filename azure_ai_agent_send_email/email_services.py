@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 import os
-import time
-import json
 from azure.communication.email import EmailClient
 from dotenv import load_dotenv
-from azure.identity import DefaultAzureCredential
 
 load_dotenv()
 
@@ -17,32 +14,33 @@ DEFAULT_MESSAGE = {
     "recipients": {
         "to": [
             {
-                "address": "akunanbaeva@microsoft.com",
-                "displayName": "Customer Name"
+                "address": os.environ["RECIPIENT_EMAIL"],
+                "displayName": os.environ["RECIPIENT_EMAIL"]
             }
         ]
     },
-    "senderAddress": "DoNotReply@536ef461-d1ad-473d-97a2-e6525de7ee04.azurecomm.net"
+    "senderAddress": os.environ["SENDER_EMAIL"]
 }
 
 POLLER_WAIT_TIME = 10
 
-def azure_send_email(subject: str, body:str) -> dict:
+
+def azure_send_email(subject: str, body: str) -> dict:
     """
     Sends an email using Azure Communication Services EmailClient.
-    
+
     This function builds the email message from a default template, modifying only the
     'subject' field in the content section. The plainText and other parameters remain unchanged.
-    
+
     Parameters:
         subject (str): The email subject to override.
         body (str): The content of the email.
-    
+
     Returns:
         dict: A dictionary containing the operation result:
               - On success: {"operationId": <operation_id>, "status": "Succeeded", "message": <success_message>}
               - On failure: {"error": <error_message>}
-    
+
     Example:
         >>> response = azure_send_email("Hello World")
         >>> print(response)
@@ -52,7 +50,7 @@ def azure_send_email(subject: str, body:str) -> dict:
         message["content"] = DEFAULT_MESSAGE["content"].copy()
 
         message["content"]["subject"] = subject
-        message["content"]["html"] = "<html><h1>" + body +"</h1></html>"
+        message["content"]["html"] = "<html><h1>" + body + "</h1></html>"
 
         email_client = EmailClient.from_connection_string(
             os.getenv("EMAIL_COMMUNICATION_SERVICES_STRING")
@@ -82,6 +80,7 @@ def azure_send_email(subject: str, body:str) -> dict:
         error_str = f"An error occurred: {ex}"
         print(error_str)
         return {"error": error_str}
+
 
 if __name__ == '__main__':
     response = azure_send_email(subject="Hello World", html="This is a test email to check the functionality.")

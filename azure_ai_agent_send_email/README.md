@@ -38,7 +38,7 @@ Set the following environment variables with your own values either in your syst
 Install the required packages using pip:
 
 ```bash
-pip install azure-ai-projects azure-identity azure-communication-email python-dotenv
+pip install azure-ai-agents azure-identity azure-communication-email python-dotenv
 ```
 
 ## Project structure
