@@ -1,5 +1,5 @@
 python-dotenv
 psycopg2-binary
-semantic-kernel==1.23.1
+semantic-kernel==1.39.4
 azure-identity
 requests
